@@ -1,6 +1,7 @@
 package com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,19 @@ class RecyclerViewAdaptor(
     private val context: Context,
     private val dataset: List<Listable>
 ): RecyclerView.Adapter<RecyclerViewAdaptor.ItemViewHolder>() {
-    class ItemViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+    inner class ItemViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val primaryTextview = view.findViewById<TextView>(R.id.primary_textview)
         val secondaryTextview = view.findViewById<TextView>(R.id.secondary_textview)
+        init {
+            print("Setting on click listener")
+            view.setOnClickListener {
+                onItemClick(adapterPosition)
+            }
+        }
+    }
+
+    fun onItemClick(position: Int) {
+        dataset[position].tapAction.invoke()
     }
 
     // sets up the recycler view cell type as `item_cell`
@@ -32,5 +43,6 @@ class RecyclerViewAdaptor(
         val item = dataset[position]
         holder.primaryTextview.text = item.getPrimaryText()
         holder.secondaryTextview.text = item.getSecondaryText()
+//        holder.view.setOnClickListener { item.tapAction() }
     }
 }

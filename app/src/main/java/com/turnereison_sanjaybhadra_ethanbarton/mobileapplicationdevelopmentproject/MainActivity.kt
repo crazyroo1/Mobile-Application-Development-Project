@@ -9,10 +9,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dataset = listOf<Unit>() // temporary until we get data
+        val dataset = listOf<Listable>(
+            File("File1"),
+            File("File2"),
+            Folder("Folder1", listOf(
+                File("Subfile1")
+            )),
+            Folder("Folder2", listOf())
+        ) // temporary until we get data
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
-        recyclerView.adapter = RecyclerViewAdaptor(this, listOf())
+        recyclerView.adapter = RecyclerViewAdaptor(this, dataset)
         recyclerView.setHasFixedSize(true)
     }
 }
