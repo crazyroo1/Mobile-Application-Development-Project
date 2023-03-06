@@ -1,6 +1,7 @@
 package com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject
 
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 
 interface Listable {
     fun getPrimaryText(): String
@@ -28,7 +29,7 @@ data class File(override val name: String): FilesystemItem, Listable {
         }
 }
 
-data class Folder(override val name: String, var children: List<FilesystemItem>): FilesystemItem, Listable {
+data class Folder(override val name: String, var children: List<Listable>, val recyclerView: RecyclerView): FilesystemItem, Listable {
     override fun getPrimaryText(): String {
         return name
     }
@@ -39,10 +40,11 @@ data class Folder(override val name: String, var children: List<FilesystemItem>)
 
     override val tapAction: () -> Unit
         get() = {
-            print("Tapped file named $name!")
+            recyclerView.adapter = RecyclerViewAdaptor(children)
+            print("Tapped folder named $name!")
         }
 }
 
 fun print(message: String) {
-    Log.d("turber", message)
+    Log.d("turbs", message)
 }
