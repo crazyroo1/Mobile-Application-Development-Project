@@ -1,7 +1,5 @@
 package com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerViewAdaptor(
-    private val context: Context,
-    private val dataset: List<Listable>
+    private var dataset: List<Listable>
 ): RecyclerView.Adapter<RecyclerViewAdaptor.ItemViewHolder>() {
     inner class ItemViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val primaryTextview = view.findViewById<TextView>(R.id.primary_textview)
@@ -31,7 +28,6 @@ class RecyclerViewAdaptor(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_cell, parent, false)
-
         return ItemViewHolder(adapterLayout)
     }
 
@@ -43,6 +39,5 @@ class RecyclerViewAdaptor(
         val item = dataset[position]
         holder.primaryTextview.text = item.getPrimaryText()
         holder.secondaryTextview.text = item.getSecondaryText()
-//        holder.view.setOnClickListener { item.tapAction() }
     }
 }
