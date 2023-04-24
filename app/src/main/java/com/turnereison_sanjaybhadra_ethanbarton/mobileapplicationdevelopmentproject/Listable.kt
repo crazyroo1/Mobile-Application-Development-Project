@@ -1,14 +1,8 @@
 package com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject.NavigationHandler.Companion.stack
-import java.net.URL
-import java.util.Stack
 
 interface Listable {
     fun getPrimaryText(): String
@@ -36,7 +30,7 @@ data class File(override val name: String): FilesystemItem, Listable {
         }
 }
 
-data class Link(override val name: String, val url: String, val context: Context): FilesystemItem, Listable {
+data class Link(override val name: String, val url: String): FilesystemItem, Listable {
     override fun getPrimaryText(): String {
         return name
     }
@@ -47,13 +41,20 @@ data class Link(override val name: String, val url: String, val context: Context
 
     override val tapAction: () -> Unit
         get() = {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(intent)
+            val urlWithWebParam = if (url.contains("docs.google.com/presentation")) {
+                "$url?usp=drive_web"
+            } else {
+                url
+            }
+
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlWithWebParam))
+            intent.setPackage("com.android.chrome")
+            NavigationHandler.context?.startActivity(intent)
             print("Tapped Link named $name")
         }
 }
 
-data class Folder(override val name: String, var children: List<Listable>, val recyclerView: RecyclerView): FilesystemItem, Listable {
+data class Folder(override val name: String, var children: List<Listable>): FilesystemItem, Listable {
     override fun getPrimaryText(): String {
         return name
     }
@@ -64,7 +65,7 @@ data class Folder(override val name: String, var children: List<Listable>, val r
 
     override val tapAction: () -> Unit
         get() = {
-            NavigationHandler.push(RecyclerViewAdaptor(children), recyclerView)
+            NavigationHandler.push(RecyclerViewAdaptor(children))
             print("Tapped folder named $name!")
         }
 }
