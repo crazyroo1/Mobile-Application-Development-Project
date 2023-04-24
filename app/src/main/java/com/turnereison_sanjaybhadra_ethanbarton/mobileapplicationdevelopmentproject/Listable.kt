@@ -6,7 +6,9 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentproject.NavigationHandler.Companion.stack
 import java.net.URL
+import java.util.Stack
 
 interface Listable {
     fun getPrimaryText(): String
@@ -62,7 +64,7 @@ data class Folder(override val name: String, var children: List<Listable>, val r
 
     override val tapAction: () -> Unit
         get() = {
-            recyclerView.adapter = RecyclerViewAdaptor(children)
+            NavigationHandler.push(RecyclerViewAdaptor(children), recyclerView)
             print("Tapped folder named $name!")
         }
 }

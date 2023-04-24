@@ -3,8 +3,10 @@ package com.turnereison_sanjaybhadra_ethanbarton.mobileapplicationdevelopmentpro
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.RecyclerView
 import java.net.URL
+import java.util.Stack
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +17,16 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         
         val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
+
+        val callback = object: OnBackPressedCallback(
+            true // default to enabled
+        ) {
+            override fun handleOnBackPressed() {
+                NavigationHandler.pop(recyclerView)
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(callback)
 
         val dataset = listOf<Listable>(
             Folder("Start Here", listOf(
@@ -90,12 +102,12 @@ class MainActivity : AppCompatActivity() {
             ) as List<Listable>, recyclerView)
         ) // temporary until we get data
 
-        recyclerView.adapter = RecyclerViewAdaptor(dataset)
+        NavigationHandler.push(RecyclerViewAdaptor(dataset), recyclerView)
         recyclerView.setHasFixedSize(true)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        print("this happened i guess")
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()

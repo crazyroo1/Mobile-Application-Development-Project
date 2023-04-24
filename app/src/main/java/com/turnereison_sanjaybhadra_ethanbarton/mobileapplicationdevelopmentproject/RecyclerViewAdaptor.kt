@@ -21,7 +21,7 @@ class RecyclerViewAdaptor(
     }
 
     fun onItemClick(position: Int) {
-        dataset[position].tapAction.invoke()
+        dataset[position].tapAction()
     }
 
     // sets up the recycler view cell type as `item_cell`
